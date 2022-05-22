@@ -14,7 +14,7 @@ def chunks(lst, n):
         yield lst[i:i + n]
 
 class TagAllMod(loader.Module):
-    """Тэгает всех в чате."""
+    """Tags everyone in chat."""
     strings = {"name":"TagAll"}
 
     def __init__(self):
@@ -25,7 +25,7 @@ class TagAllMod(loader.Module):
         self.client = client
 
     async def tagallcmd(self, message):
-        """Используй .tagall <текст (по желанию)>."""
+        """Usage: .tagall <text>."""
         arg = utils.get_args_raw(message)
         logger.error(message)
         notifies = []

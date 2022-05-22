@@ -7,7 +7,7 @@ from .. import loader, utils
 
 @loader.tds
 class WelcomeMod(loader.Module):
-    """Приветствие новых пользователей в чате."""
+    """Welcoming new users in chat."""
 
     strings = {"name": "Welcome"}
 
@@ -16,32 +16,32 @@ class WelcomeMod(loader.Module):
         self.client = client
 
     async def welcomecmd(self, message):
-        """Включить/выключить приветствие новых пользователей в чате.
-        Используй: .welcome <clearall (по желанию)>."""
+        """Enable/disable welcoming new users in chat.
+        Usage: .welcome <clearall (if needed)>."""
         welcome = self.db.get("Welcome", "welcome", {})
         chatid = str(message.chat_id)
         args = utils.get_args_raw(message)
         if args == "clearall":
             self.db.set("Welcome", "welcome", {})
             return await message.edit(
-                "<b>[Welcome Mode]</b> Все настройки модуля сброшены."
+                "<b>[Welcome Mode]</b> All settings will be reset."
             )
 
         if chatid in welcome:
             welcome.pop(chatid)
             self.db.set("Welcome", "welcome", welcome)
-            return await message.edit("<b>[Welcome Mode]</b> Деактивирован!")
+            return await message.edit("<b>[Welcome Mode]</b> Was disabled.")
 
         welcome.setdefault(chatid, {})
-        welcome[chatid].setdefault("message", "Добро пожаловать в чат!")
-        welcome[chatid].setdefault("is_reply", False)
+        welcome[chatid].setdefault("message", "Welcome in this chat!")
+        welcome[chatid].setdefault("is_reply", True)
         self.db.set("Welcome", "welcome", welcome)
-        await message.edit("<b>[Welcome Mode]</b> Активирован!")
+        await message.edit("<b>[Welcome Mode]</b> Activated!")
 
     async def setwelcomecmd(self, message):
-        """Установить новое приветствие новых пользователей в
-        чате.\nИспользуй: .setwelcome <текст (можно использовать {name}; {
-        chat})>; ничего."""
+        """Use new welcome text for new users in
+        chat.\nUsage: .setwelcome <text (optional variables: {name}; {
+        chat})>; nothing."""
         welcome = self.db.get("Welcome", "welcome", {})
         args = utils.get_args_raw(message)
         reply = await message.get_reply_message()
@@ -50,14 +50,14 @@ class WelcomeMod(loader.Module):
         try:
             if not args and not reply:
                 return await message.edit(
-                    f"<b>Приветствие новых "
-                    f"пользователей в "
+                    f"<b>Welcoming of new "
+                    f"users in "
                     f'"{chat.title}":</b>\n\n'
-                    f"<b>Статус:</b> Включено.\n"
-                    f'<b>Приветствие:</b> {welcome[chatid]["message"]}\n\n '
-                    f"<b>~ Установить новое приветствие "
-                    f"можно с помощью команды:</b> "
-                    f".setwelcome <текст>."
+                    f"<b>Status:</b> Enabled.\n"
+                    f'<b>Text:</b> {welcome[chatid]["message"]}\n\n '
+                    f"<b>~ You can change the welcome text "
+                    f"by using</b> "
+                    f".setwelcome <text>."
                 )
             else:
                 if reply:
@@ -68,16 +68,16 @@ class WelcomeMod(loader.Module):
                     welcome[chatid]["is_reply"] = False
                 self.db.set("Welcome", "welcome", welcome)
                 return await message.edit(
-                    "<b>Новое приветствие установлено " "успешно!</b>"
+                    "<b>New welcome text was changed " "successfully!</b>"
                 )
         except KeyError:
             return await message.edit(
-                f'<b>Приветствие новых пользователей в "{chat.title}":</b>\n\n '
-                f"<b>Статус:</b> Отключено"
+                f'<b>Welcoming new users in "{chat.title}":</b>\n\n '
+                f"<b>Status:</b> disabled"
             )
 
     async def watcher(self, message):
-        """Интересно, почему он именно watcher называется... 🤔"""
+        """Hmm, why is it called so?... 🤔"""
         try:
             welcome = self.db.get("Welcome", "welcome", {})
             chatid = str(message.chat_id)
