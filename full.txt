@@ -2,3 +2,4 @@ welcome
 tagall
 flood
 SystemInfo
+BanAuto
