@@ -1,5 +1,6 @@
 welcome
 tagall
 flood
-SystemInfo
-BanAuto
+systemInfo
+banAuto
+swmutw
