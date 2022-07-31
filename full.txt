@@ -3,4 +3,4 @@ tagall
 flood
 systeminfo
 banauto
-swmute
+inline
